@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=ecto://postgres:postgres@db/url_shortener
+      - SECRET_KEY_BASE=dfrxrohrktYn5s2Wbua/cChl8HftO1d19VL+DzS95wHIt2WvkhT3nui92UN4O+J/
+      - PHX_HOST=localhost
+      - PORT=4000
+    depends_on:
+      - db
+    command: ["/app/bin/url_shortener", "start"]
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=url_shortener
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

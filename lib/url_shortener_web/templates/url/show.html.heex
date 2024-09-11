@@ -1,0 +1,6 @@
+<h2>Shortened URL</h2>
+
+<p>Long URL: <%= @url.long_url %></p>
+<p>Short URL: <%= Routes.url_url(@conn, :show, @url.short_path) %></p>
+
+<%= link "Back", to: Routes.url_path(@conn, :index) %>

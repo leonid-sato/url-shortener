@@ -1,0 +1,64 @@
+<div class="url-shortener-container">
+  <h2>Shorten a URL</h2>
+
+  <%= form_for @changeset, Routes.page_path(@conn, :create), [class: "url-shortener-form", id: "url-form"], fn f -> %>
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger">
+        <p>Oops, something went wrong! Please check the errors below.</p>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= label f, :long_url, "Enter a long URL" %>
+      <%= text_input f, :long_url, placeholder: "https://example.com/very/long/url", class: "form-control" %>
+      <%= error_tag f, :long_url %>
+    </div>
+
+    <div class="form-group">
+      <%= label f, :short_path, "Custom short path (optional)" %>
+      <%= text_input f, :short_path, placeholder: "custom-path", class: "form-control" %>
+      <%= error_tag f, :short_path %>
+    </div>
+
+    <div class="form-group">
+      <%= submit "Shorten URL", class: "btn btn-primary", id: "submit-button" %>
+    </div>
+  <% end %>
+
+  <div id="loading-indicator" style="display: none;">
+    <p>Shortening URL, please wait...</p>
+  </div>
+
+  <%= if @shortened_url do %>
+    <div class="shortened-url-container">
+      <h3>Your shortened URL:</h3>
+      <p class="shortened-url">
+        <a href="#" id="short-url-link"></a>
+      </p>
+      <%= if @original_url do %>
+        <p class="original-url">Original URL: <%= @original_url %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('url-form');
+    var loadingIndicator = document.getElementById('loading-indicator');
+    var submitButton = document.getElementById('submit-button');
+    var shortUrlLink = document.getElementById('short-url-link');
+
+    if (shortUrlLink) {
+      var shortPath = '<%= @shortened_url %>';
+      var fullShortUrl = window.location.origin + '/' + shortPath;
+      shortUrlLink.href = fullShortUrl;
+      shortUrlLink.textContent = fullShortUrl;
+    }
+
+    form.addEventListener('submit', function() {
+      loadingIndicator.style.display = 'block';
+      submitButton.disabled = true;
+    });
+  });
+</script>

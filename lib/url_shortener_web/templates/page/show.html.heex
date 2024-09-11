@@ -1,0 +1,6 @@
+<h1>Shortened URL</h1>
+
+<p>Long URL: <%= @url.long_url %></p>
+<p>Short URL: <%= Routes.page_url(@conn, :redirect_short_url, @url.short_path) %></p>
+
+<%= link "Back to home", to: Routes.page_path(@conn, :index) %>
